@@ -8,6 +8,7 @@ version: 2
 
 seeds:
   - name: hs_codes
+    schema: seeds
     description: >
       AHTN/HS code to duty rate mapping based on the Customs Modernization
       and Tariff Act (CMTA 2016). Each row maps an 8-digit harmonized

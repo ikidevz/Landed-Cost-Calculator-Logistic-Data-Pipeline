@@ -54,7 +54,6 @@ with DAG(
     schedule="0 1 * * *",
     catchup=False,
     default_args=DEFAULT_ARGS,
-    max_active_runs=1,
     tags=["landed-cost", "portfolio", "data-engineering"],
 ) as dag:
 

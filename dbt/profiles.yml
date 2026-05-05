@@ -7,6 +7,6 @@ landed_cost:
       user: "{{ env_var('POSTGRES_USER', 'lcuser') }}"
       password: "{{ env_var('POSTGRES_PASSWORD', 'lcpassword') }}"
       port: "{{ env_var('POSTGRES_PORT', '5432') | int }}"
-      dbname: "{{ env_var('POSTGRES_DB', 'landed_cost_db') }}"
+      dbname: "{{ env_var('PIPELINE_DB_NAME', 'landed_cost_db') }}"
       schema: public
       threads: 4
