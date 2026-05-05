@@ -26,7 +26,7 @@ DBT_ENV = {
     **os.environ,
     "POSTGRES_HOST":     os.getenv("POSTGRES_HOST",     "postgres"),
     "POSTGRES_PORT":     os.getenv("POSTGRES_PORT",     "5432"),
-    "POSTGRES_DB":       os.getenv("POSTGRES_DB",       "landed_cost_db"),
+    "POSTGRES_DB":       os.getenv("PIPELINE_DB_NAME",       "landed_cost_db"),
     "POSTGRES_USER":     os.getenv("POSTGRES_USER",     "lcuser"),
     "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "lcpassword"),
 }
