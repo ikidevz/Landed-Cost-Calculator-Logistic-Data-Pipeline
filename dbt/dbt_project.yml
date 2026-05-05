@@ -1,0 +1,53 @@
+name: "landed_cost"
+version: "1.0.0"
+config-version: 2
+
+profile: "landed_cost"
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+seeds:
+  landed_cost:
+    +schema: seeds
+    hs_codes:
+      +column_types:
+        hs_code: "char(8)"
+        description: "varchar(200)"
+        category: "varchar(100)"
+        duty_rate: "numeric(5,4)"
+        cmta_chapter: "varchar(10)"
+        unit_of_quantity: "varchar(20)"
+        is_active: "boolean"
+        effective_date: "date"
+    port_fees:
+      +column_types:
+        port_name: "varchar(50)"
+        port_operator: "varchar(150)"
+        arrastre_rate_php: "numeric(10,4)"
+        wharfage_rate_php: "numeric(10,4)"
+        reference_rate_usd: "numeric(8,4)"
+        effective_date: "date"
+        is_active: "boolean"
+
+models:
+  landed_cost:
+    staging:
+      +materialized: table
+      +schema: staging
+
+    intermediate:
+      +materialized: table
+      +schema: intermediate
+
+    marts:
+      +materialized: table
+      +schema: marts

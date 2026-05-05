@@ -1,0 +1,11 @@
+port_name,port_operator,arrastre_rate_php,wharfage_rate_php,reference_rate_usd,is_active,effective_date
+Manila,ICTSI (International Container Terminal Services),560.0000,156.0000,55.0000,true,2024-01-01
+Cebu,APMC - Asian Pacific Marine Contractors,490.0000,130.0000,55.0000,true,2024-01-01
+Davao,SPIA - Sasa Port International Authority,470.0000,120.0000,55.0000,true,2024-01-01
+Subic Bay,SBMA - Subic Bay Metropolitan Authority / ICTSI subsidiary,520.0000,145.0000,55.0000,true,2024-01-01
+Batangas,BIPI - Batangas International Port Inc. (PPA-managed),480.0000,125.0000,55.0000,true,2024-01-01
+Cagayan de Oro,CGDP - Cagayan de Oro Port (PPA-managed),450.0000,115.0000,55.0000,true,2024-01-01
+Iloilo,ILHP - Iloilo Port (PPA-managed),445.0000,110.0000,55.0000,true,2024-01-01
+General Santos,GENSAN - General Santos Fish Port Complex / PPA,440.0000,108.0000,55.0000,true,2024-01-01
+Zamboanga,ZAMPORT - Zamboanga Port (PPA-managed),435.0000,105.0000,55.0000,true,2024-01-01
+Clark,LIPAD - Clark International Airport and Freeport,510.0000,0.0000,55.0000,true,2024-01-01

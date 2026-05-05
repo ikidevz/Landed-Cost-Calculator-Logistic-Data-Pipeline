@@ -1,0 +1,116 @@
+version: 2
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEEDS: reference lookup tables
+# Loaded via: dbt seed
+# Source CSVs: seeds/hs_codes.csv, seeds/port_fees.csv
+# ─────────────────────────────────────────────────────────────────────────────
+
+seeds:
+  - name: hs_codes
+    description: >
+      AHTN/HS code to duty rate mapping based on the Customs Modernization
+      and Tariff Act (CMTA 2016). Each row maps an 8-digit harmonized
+      system code to its Most Favoured Nation (MFN) duty rate.
+      Update this seed when BOC issues new tariff schedules.
+    columns:
+      - name: hs_code
+        description: "8-digit AHTN harmonized system code (padded with leading zeros)"
+        tests:
+          - unique
+          - not_null
+      - name: description
+        description: "Human-readable commodity description per BOC/CMTA"
+        tests:
+          - not_null
+      - name: category
+        description: "Grouping for dashboard filtering (Electronics, Apparel, Food, etc.)"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Electronics"
+                - "Semiconductors"
+                - "Apparel"
+                - "Footwear"
+                - "Automotive"
+                - "Plastics"
+                - "Steel"
+                - "Food"
+                - "Chemicals"
+                - "Pharma"
+                - "Furniture"
+      - name: duty_rate
+        description: "MFN duty rate as a decimal (e.g. 0.2000 = 20%)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND duty_rate <= 1"
+      - name: cmta_chapter
+        description: "CMTA 2016 chapter number this HS code falls under"
+      - name: unit_of_quantity
+        description: "BOC unit of quantity (PCS, KGS, MT, PRS, etc.)"
+      - name: is_active
+        description: "FALSE if this rate has been superseded or revoked"
+        tests:
+          - not_null
+      - name: effective_date
+        description: "Date from which this duty rate is applicable"
+        tests:
+          - not_null
+
+  - name: port_fees
+    description: >
+      Port authority fee schedule for Philippine ports of discharge.
+      Arrastre (cargo handling) and wharfage (berth usage) rates are set by
+      the Philippine Ports Authority (PPA) and terminal operators (ICTSI, SPIA, APMC).
+      Rates are in PHP per gross metric ton.
+      Update this seed when PPA issues revised fee circulars.
+    columns:
+      - name: port_name
+        description: "Port of discharge name — must match values in raw_shipments"
+        tests:
+          - unique
+          - not_null
+          - accepted_values:
+              values:
+                - "Manila"
+                - "Cebu"
+                - "Davao"
+                - "Subic Bay"
+                - "Batangas"
+                - "Cagayan de Oro"
+                - "Iloilo"
+                - "General Santos"
+                - "Zamboanga"
+                - "Clark"
+      - name: port_operator
+        description: "Terminal operator responsible for arrastre charges"
+        tests:
+          - not_null
+      - name: arrastre_rate_php
+        description: "Cargo handling charge in PHP per gross metric ton (ICTSI/SPIA/APMC schedule)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: wharfage_rate_php
+        description: "Berth usage charge in PHP per gross metric ton (PPA-approved rate)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: reference_rate_usd
+        description: "USD/PHP exchange rate used to convert PHP fees to USD in int_port_fees"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: is_active
+        description: "FALSE if this port or rate schedule is no longer in use"
+        tests:
+          - not_null
+      - name: effective_date
+        description: "Date from which this fee schedule is applicable"
+        tests:
+          - not_null

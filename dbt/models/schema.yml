@@ -1,0 +1,76 @@
+version: 2
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MODEL DOCUMENTATION & TESTS
+# Source definitions live in: models/staging/src_staging.yml
+# Seed definitions live in:   models/seeds/schema.yml
+# ─────────────────────────────────────────────────────────────────────────────
+
+models:
+  - name: stg_shipments
+    description: "Cleaned and type-cast shipment records from staging.raw_shipments"
+    columns:
+      - name: shipment_id
+        tests: [unique, not_null]
+      - name: shipment_date
+        tests: [not_null]
+      - name: cif_value_usd
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+  - name: int_dutiable_value
+    description: "CIF + insurance (0.8%) → dutiable value used for duty/VAT base"
+    columns:
+      - name: shipment_id
+        tests: [unique, not_null]
+      - name: insurance_usd
+        tests: [not_null]
+      - name: dutiable_value_usd
+        tests: [not_null]
+
+  - name: int_customs_fees
+    description: "Duty and VAT computation joined with hs_codes seed"
+    columns:
+      - name: shipment_id
+        tests: [unique, not_null]
+      - name: customs_duty_usd
+        tests: [not_null]
+      - name: vat_usd
+        tests: [not_null]
+      - name: duty_rate
+        tests:
+          - accepted_values:
+              values: [0.0, 0.01, 0.03, 0.05, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.38]
+
+  - name: int_port_fees
+    description: "Arrastre and wharfage lookup from port_fees seed"
+    columns:
+      - name: shipment_id
+        tests: [unique, not_null]
+      - name: arrastre_usd
+        tests: [not_null]
+      - name: wharfage_usd
+        tests: [not_null]
+
+  - name: fct_landed_cost
+    description: "Final landed cost fact table — primary analytics and KPI surface"
+    columns:
+      - name: shipment_id
+        tests: [unique, not_null]
+      - name: landed_cost_usd
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: landed_cost_php
+        tests: [not_null]
+      - name: port_of_discharge
+        tests:
+          - accepted_values:
+              values: ["Manila", "Cebu", "Davao", "Subic Bay", "Batangas",
+                       "Cagayan de Oro", "Iloilo", "General Santos",
+                       "Zamboanga", "Clark"]
+      - name: is_anomaly
+        tests: [not_null]

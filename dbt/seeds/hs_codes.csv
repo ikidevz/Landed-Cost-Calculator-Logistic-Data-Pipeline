@@ -1,0 +1,46 @@
+hs_code,description,category,duty_rate,cmta_chapter,unit_of_quantity,is_active,effective_date
+84713000,Laptop computers,Electronics,0.0000,84,PCS,true,2024-01-01
+84715000,Processing units (CPUs),Electronics,0.0000,84,PCS,true,2024-01-01
+85171200,Mobile phones / smartphones,Electronics,0.0000,85,PCS,true,2024-01-01
+85285200,LCD monitors,Electronics,0.0000,85,PCS,true,2024-01-01
+84733000,Computer parts and accessories,Electronics,0.0000,84,PCS,true,2024-01-01
+85044000,Power supplies / converters,Electronics,0.0100,85,PCS,true,2024-01-01
+85176200,Networking equipment / routers,Electronics,0.0000,85,PCS,true,2024-01-01
+85258000,Digital cameras,Electronics,0.0100,85,PCS,true,2024-01-01
+85423100,Integrated circuits (processors),Semiconductors,0.0000,85,PCS,true,2024-01-01
+85423900,Other electronic components,Semiconductors,0.0000,85,PCS,true,2024-01-01
+85414000,Photosensitive semiconductors,Semiconductors,0.0000,85,PCS,true,2024-01-01
+62034200,Men's trousers cotton,Apparel,0.2000,62,PCS,true,2024-01-01
+62052000,Men's shirts cotton,Apparel,0.2000,62,PCS,true,2024-01-01
+62114200,Women's garments manmade fibre,Apparel,0.2000,62,PCS,true,2024-01-01
+61091000,T-shirts cotton knitted,Apparel,0.2000,61,PCS,true,2024-01-01
+62046200,Women's trousers cotton,Apparel,0.2000,62,PCS,true,2024-01-01
+64041100,Sports footwear rubber/plastic,Footwear,0.2500,64,PRS,true,2024-01-01
+64039100,Leather footwear other,Footwear,0.2000,64,PRS,true,2024-01-01
+64021200,Ski boots outer sole rubber,Footwear,0.2500,64,PRS,true,2024-01-01
+87032319,Passenger cars 1500-3000cc,Automotive,0.3000,87,PCS,true,2024-01-01
+87032210,Passenger cars le1000cc,Automotive,0.0500,87,PCS,true,2024-01-01
+87089900,Auto parts and accessories,Automotive,0.1000,87,PCS,true,2024-01-01
+87070000,Vehicle bodies / cabs,Automotive,0.3000,87,PCS,true,2024-01-01
+39011000,Polyethylene low density (LDPE),Plastics,0.0700,39,KGS,true,2024-01-01
+39021000,Polypropylene,Plastics,0.0700,39,KGS,true,2024-01-01
+39031100,Polystyrene expandable,Plastics,0.0700,39,KGS,true,2024-01-01
+72142000,Steel bars deformed (rebar),Steel,0.0500,72,MT,true,2024-01-01
+72163200,I-beams steel,Steel,0.0500,72,MT,true,2024-01-01
+72104900,Flat-rolled steel zinc-coated,Steel,0.0500,72,MT,true,2024-01-01
+10063000,Semi-milled / wholly milled rice,Food,0.3500,10,MT,true,2024-01-01
+17011400,Raw cane sugar,Food,0.3800,17,MT,true,2024-01-01
+02013000,Fresh / chilled beef,Food,0.0500,02,KGS,true,2024-01-01
+03061700,Frozen shrimp and prawns,Food,0.0700,03,KGS,true,2024-01-01
+07019000,Potatoes fresh or chilled,Food,0.3000,07,KGS,true,2024-01-01
+08051000,Oranges fresh or dried,Food,0.1000,08,KGS,true,2024-01-01
+29054500,Glycerol (glycerin),Chemicals,0.0300,29,KGS,true,2024-01-01
+28042100,Argon gas,Chemicals,0.0000,28,KGS,true,2024-01-01
+29053100,Ethylene glycol,Chemicals,0.0300,29,KGS,true,2024-01-01
+38089400,Disinfectants,Chemicals,0.0100,38,KGS,true,2024-01-01
+30041000,Medicaments containing penicillin,Pharma,0.0000,30,KGS,true,2024-01-01
+30049000,Other medicaments,Pharma,0.0000,30,KGS,true,2024-01-01
+30059000,Medical dressings / bandages,Pharma,0.0000,30,KGS,true,2024-01-01
+94011000,Aircraft seats,Furniture,0.1000,94,PCS,true,2024-01-01
+94036000,Wooden furniture other,Furniture,0.2500,94,PCS,true,2024-01-01
+94017900,Upholstered seats other,Furniture,0.2500,94,PCS,true,2024-01-01
