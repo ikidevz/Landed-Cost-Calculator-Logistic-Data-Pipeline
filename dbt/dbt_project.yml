@@ -53,4 +53,5 @@ models:
       +schema: marts
 
     seeds:
+      +materialized: table
       +schema: seeds

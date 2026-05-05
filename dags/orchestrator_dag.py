@@ -26,9 +26,9 @@ DBT_ENV = {
     **os.environ,
     "POSTGRES_HOST":     os.getenv("POSTGRES_HOST",     "postgres"),
     "POSTGRES_PORT":     os.getenv("POSTGRES_PORT",     "5432"),
-    "POSTGRES_DB":       os.getenv("PIPELINE_DB_NAME",       "landed_cost_db"),
-    "POSTGRES_USER":     os.getenv("POSTGRES_USER",     "lcuser"),
-    "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "lcpassword"),
+    "POSTGRES_DB":       os.getenv("PIPELINE_DB_NAME",  "landed_cost_db"),
+    "POSTGRES_USER":     os.getenv("POSTGRES_USER",     "landed_cost_user"),
+    "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "landed_cost_password"),
 }
 
 
@@ -51,9 +51,10 @@ def task_produce_to_kafka(**context) -> None:
 with DAG(
     dag_id="landed_cost_pipeline",
     description="Philippine import landed cost ELT pipeline",
-    schedule="0 1 * * *",
+    schedule=None,
     catchup=False,
     default_args=DEFAULT_ARGS,
+    max_active_runs=1,
     tags=["landed-cost", "portfolio", "data-engineering"],
 ) as dag:
 
@@ -94,13 +95,8 @@ with DAG(
         ),
     )
 
-    dbt_clean = BashOperator(
-        task_id="dbt_clean",
-        bash_command=f"cd {DBT_DIR} && rm -rf dbt_packages/ target/ && echo 'dbt workspace cleaned'",
-        env=DBT_ENV,
-    )
-    dbt_deps = BashOperator(
-        task_id="dbt_deps",
+    dbt_init = BashOperator(
+        task_id="dbt_init",
         bash_command=f"cd {DBT_DIR} && dbt deps --profiles-dir .",
         env=DBT_ENV,
     )
@@ -115,9 +111,7 @@ with DAG(
         task_id="dbt_run",
         bash_command=f"""
             cd {DBT_DIR} && \
-            dbt run --profiles-dir . --select staging && \
-            dbt run --profiles-dir . --select intermediate && \
-            dbt run --profiles-dir . --select marts
+            dbt run --profiles-dir . --select staging+ intermediate+ marts+ --no-partial-parse
         """,
         env=DBT_ENV,
     )
@@ -128,4 +122,4 @@ with DAG(
         env=DBT_ENV,
     )
 
-    generate_data_task >> produce_to_kafka_task >> wait_consumer >> dbt_clean >> dbt_deps >> dbt_seed >> dbt_run >> dbt_test
+    generate_data_task >> produce_to_kafka_task >> wait_consumer >> dbt_init >> dbt_seed >> dbt_run >> dbt_test
