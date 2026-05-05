@@ -202,13 +202,14 @@ services:
     working_dir: /app
     command: >
       bash -c "
+        apt-get update -qq && apt-get install -y --no-install-recommends postgresql-client &&
         pip install --no-cache-dir kafka-python psycopg2-binary python-dotenv &&
-        echo 'Waiting for PostgreSQL and databases to be ready...' &&
+        echo 'Waiting for PostgreSQL...' &&
         until PGPASSWORD=$${POSTGRES_PASSWORD} psql -h $${POSTGRES_HOST} -U $${POSTGRES_USER} -d $${PIPELINE_DB_NAME} -c 'SELECT 1' 2>/dev/null; do
           echo 'Waiting for database...'
           sleep 2
         done &&
-        echo 'Database is ready! Starting consumer...' &&
+        echo 'Database ready! Starting consumer...' &&
         python src/consumer.py
       "
     env_file:
@@ -217,6 +218,11 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_TOPIC: ${KAFKA_TOPIC:-shipments}
       PYTHONPATH: /app
+      POSTGRES_DB: ${PIPELINE_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}/src:/app/src
     depends_on:
