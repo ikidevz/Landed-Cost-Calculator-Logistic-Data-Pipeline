@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.sensors.time_delta import TimeDeltaSensor
+from airflow.sdk.execution_time.xcom import XCom
 from datetime import datetime, timedelta
 
 from src.generate import generate_data
@@ -35,6 +36,7 @@ DBT_ENV = {
 def task_generate_data(**context) -> str:
     record_count = random.randint(1_000, 5_000)
     context["ti"].xcom_push(key="record_count", value=record_count)
+    print(f"[generate_data] record_count={record_count}")
 
     output_path = generate_data(records=record_count)
     context["ti"].xcom_push(key="generated_file", value=str(output_path))
@@ -46,6 +48,21 @@ def task_produce_to_kafka(**context) -> None:
         task_ids="generate_data", key="generated_file"
     )
     produce_to_kafka(file_path=file_path, delay=0.01)
+
+
+def task_clear_xcom(**context):
+    dag_id = context["dag"].dag_id
+    run_id = context["run_id"]
+
+    # Delete specific keys pushed by generate_data
+    for key in ["generated_file", "record_count"]:
+        XCom.delete(
+            key=key,
+            task_id="generate_data",
+            dag_id=dag_id,
+            run_id=run_id,
+        )
+    print(f"[clear_xcom] Cleared XCom for run_id={run_id}")
 
 
 with DAG(
@@ -122,4 +139,9 @@ with DAG(
         env=DBT_ENV,
     )
 
-    generate_data_task >> produce_to_kafka_task >> wait_consumer >> dbt_init >> dbt_seed >> dbt_run >> dbt_test
+    clear_xcom_task = PythonOperator(
+        task_id="clear_xcom",
+        python_callable=task_clear_xcom,
+    )
+
+    generate_data_task >> produce_to_kafka_task >> wait_consumer >> dbt_init >> dbt_seed >> dbt_run >> dbt_test >> clear_xcom_task
